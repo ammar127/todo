@@ -61,19 +61,6 @@ export const todoReducer = (state = TODO_INITIAL_STATE, action) => {
           };
         }),
       };
-    case TODO_CONSTANTS.EDIT_TODO:
-      return {
-        ...state,
-        list: state.list.map((todo) => {
-          if (todo.id === action.id) {
-            return {
-              ...todo,
-              isEditing: true,
-            };
-          }
-          return todo;
-        }),
-      };
     case TODO_CONSTANTS.UPDATE_TODO:
       return {
         ...state,
@@ -82,7 +69,6 @@ export const todoReducer = (state = TODO_INITIAL_STATE, action) => {
             return {
               ...todo,
               text: action.text,
-              isEditing: false,
             };
           }
           return todo;

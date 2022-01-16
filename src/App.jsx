@@ -1,10 +1,9 @@
-import React, { createRef, useState } from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
-import { Footer, Header, Item } from './components';
+import { Footer, Item } from './components';
 import './App.css';
 import {
   ALL_TODOS,
-  UN,
   COMPLETED_TODOS,
   ENTER_KEY,
   ACTIVE_TODOS,
@@ -19,7 +18,6 @@ import {
   getUncompletedTodoCount,
   todoActions,
 } from './store';
-import { useRef } from 'react';
 
 function App({
   addTodo,
@@ -39,7 +37,7 @@ function App({
 }) {
   const [editing, setEditing] = useState(null);
   const [nowShowing, setNowShowing] = useState(ALL_TODOS);
-  const newTodoField = useRef();
+  const [text, setText] = useState('');
   const list =
     nowShowing === ALL_TODOS
       ? all
@@ -48,18 +46,21 @@ function App({
       : nowShowing === ACTIVE_TODOS
       ? unCompleted
       : deleted;
+
+  const handleChange = (event) => {
+    var input = event.target;
+    setText(input.value);
+  };
   const handleNewTodoKeyDown = (event) => {
     if (event.keyCode !== ENTER_KEY) {
       return;
     }
-
     event.preventDefault();
-
-    var val = newTodoField.value.trim();
+    var val = text.trim();
 
     if (val) {
+      setText('');
       addTodo(val);
-      newTodoField.value = '';
     }
   };
 
@@ -70,23 +71,19 @@ function App({
   };
 
   const handleToggle = (todoToToggle) => {
-    toggle(todoToToggle);
+    toggle(todoToToggle.id);
   };
 
   const handleDestroy = (todo) => {
-    destroy(todo);
+    destroy(todo.id);
   };
 
   const handleEdit = (todo) => {
     setEditing(todo.id);
   };
 
-  const handleSave = (text) => {
-    update(editing, text);
-    setEditing(null);
-  };
-
-  const cancel = () => {
+  const handleSave = (todo, text) => {
+    update(todo.id, text);
     setEditing(null);
   };
 
@@ -103,33 +100,37 @@ function App({
         onDestroy={() => handleDestroy(todo)}
         onEdit={() => handleEdit(todo)}
         editing={editing === todo.id}
-        onSave={() => handleSave(todo)}
-        onCancel={cancel}
+        onSave={(text) => handleSave(todo, text)}
       />
     );
   });
 
-  const main = () => {
-    const activeTodoCount = 0;
-    return (
-      <section className='main'>
-        <input
-          className='toggle-all'
-          type='checkbox'
-          onChange={(e) => handleToggleAll(e)}
-          checked={activeTodoCount === 0}
-        />
-        <label htmlFor='toggle-all'>Mark all as complete</label>
-        <ul className='todo-list'>{todoItems}</ul>
-      </section>
-    );
-  };
+  const main = (
+    <section className='main'>
+      <input
+        className='toggle-all'
+        type='checkbox'
+        onChange={(e) => handleToggleAll(e)}
+        checked={activeTodoCount === 0}
+      />
+      <label htmlFor='toggle-all'>Mark all as complete</label>
+      <ul className='todo-list'>{todoItems}</ul>
+    </section>
+  );
+
   return (
     <section className='todoapp'>
-      <Header
-        newTodoField={newTodoField}
-        handleNewTodoKeyDown={handleNewTodoKeyDown}
-      />
+      <header className='header'>
+        <h1>todos</h1>
+        <input
+          className='new-todo'
+          placeholder='What needs to be done?'
+          onKeyDown={(e) => handleNewTodoKeyDown(e)}
+          onChange={(e) => handleChange(e)}
+          value={text}
+          autoFocus={true}
+        />
+      </header>
       {main}
       <Footer
         count={activeTodoCount}

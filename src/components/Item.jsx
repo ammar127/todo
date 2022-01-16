@@ -1,14 +1,31 @@
-import React, { createRef, useState } from 'react';
+import React, { useState } from 'react';
 import classNames from 'classnames';
-import { ALL_TODOS } from '../constants';
+import { ENTER_KEY } from '../constants';
 
-const Item = ({ onDestroy, onToggle, todo, editing }) => {
-  const editField = createRef();
+const Item = ({ todo, onToggle, onDestroy, onEdit, editing, onSave }) => {
   const [editText, setEditText] = useState('');
-  const handleEdit = () => {};
-  const handleSubmit = () => {};
-  const handleChange = () => {};
-  const handleKeyDown = () => {};
+  const handleSubmit = () => {
+    var val = editText.trim();
+    if (val) {
+      onSave(val);
+    }
+  };
+
+  const handleEdit = () => {
+    onEdit();
+    setEditText(todo.text);
+  };
+
+  const handleKeyDown = (event) => {
+    if (event.keyCode === ENTER_KEY) {
+      handleSubmit();
+    }
+  };
+
+  const handleChange = (event) => {
+    var input = event.target;
+    setEditText(input.value);
+  };
   return (
     <li
       className={classNames({
@@ -23,11 +40,10 @@ const Item = ({ onDestroy, onToggle, todo, editing }) => {
           checked={todo.completed}
           onChange={onToggle}
         />
-        <label onDoubleClick={(e) => handleEdit()}>{todo.title}</label>
+        <label onDoubleClick={(e) => handleEdit()}>{todo.text}</label>
         <button className='destroy' onClick={onDestroy} />
       </div>
       <input
-        ref={editField}
         className='edit'
         value={editText}
         onBlur={(e) => handleSubmit(e)}
