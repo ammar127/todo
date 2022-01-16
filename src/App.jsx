@@ -1,10 +1,14 @@
-import logo from './logo.svg';
 import './App.css';
+import { Header, Main } from './components';
 
 function App() {
   return (
     <div>
-      <h1>Hello world</h1>
+      <header className='header'>
+        <h1>todos</h1>
+        <Header />
+      </header>
+      <Main />
     </div>
   );
 }
