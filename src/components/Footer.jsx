@@ -2,23 +2,22 @@ import classNames from 'classnames';
 import React from 'react';
 import { ALL_TODOS, ACTIVE_TODOS, COMPLETED_TODOS } from '../constants';
 
-function Footer({ count }) {
+function Footer({ count, completedCount, onClearCompleted, nowShowing }) {
   var activeTodoWord = count === 0 ? 'item' : 'items';
   var clearButton = null;
 
-  if (this.props.completedCount > 0) {
+  if (completedCount > 0) {
     clearButton = (
-      <button className='clear-completed' onClick={this.props.onClearCompleted}>
+      <button className='clear-completed' onClick={onClearCompleted}>
         Clear completed
       </button>
     );
   }
 
-  const nowShowing = this.props.nowShowing;
   return (
     <footer className='footer'>
       <span className='todo-count'>
-        <strong>{this.props.count}</strong> {activeTodoWord} left
+        <strong>{count}</strong> {activeTodoWord} left
       </span>
       <ul className='filters'>
         <li>

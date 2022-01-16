@@ -1,15 +1,13 @@
 import './App.css';
-import { Header, Main } from './components';
+import { Footer, Header, Main } from './components';
 
 function App() {
   return (
-    <div>
-      <header className='header'>
-        <h1>todos</h1>
-        <Header />
-      </header>
+    <section className='todoapp'>
+      <Header />
       <Main />
-    </div>
+      <Footer count={0} />
+    </section>
   );
 }
 
