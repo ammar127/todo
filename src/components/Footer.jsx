@@ -1,8 +1,19 @@
 import classNames from 'classnames';
 import React from 'react';
-import { ALL_TODOS, ACTIVE_TODOS, COMPLETED_TODOS } from '../constants';
+import {
+  ALL_TODOS,
+  ACTIVE_TODOS,
+  COMPLETED_TODOS,
+  DELETED_TODOS,
+} from '../constants';
 
-function Footer({ count, completedCount, onClearCompleted, nowShowing }) {
+function Footer({
+  count,
+  completedCount,
+  onClearCompleted,
+  nowShowing,
+  onShow,
+}) {
   var activeTodoWord = count === 0 ? 'item' : 'items';
   var clearButton = null;
 
@@ -21,28 +32,36 @@ function Footer({ count, completedCount, onClearCompleted, nowShowing }) {
       </span>
       <ul className='filters'>
         <li>
-          <a
-            href='#/'
+          <button
+            onClick={() => onShow(ALL_TODOS)}
             className={classNames({ selected: nowShowing === ALL_TODOS })}
           >
             All
-          </a>
+          </button>
         </li>{' '}
         <li>
-          <a
-            href='#/active'
+          <button
+            onClick={() => onShow(ACTIVE_TODOS)}
             className={classNames({ selected: nowShowing === ACTIVE_TODOS })}
           >
             Active
-          </a>
+          </button>
         </li>{' '}
         <li>
-          <a
-            href='#/completed'
+          <button
+            onClick={() => onShow(COMPLETED_TODOS)}
             className={classNames({ selected: nowShowing === COMPLETED_TODOS })}
           >
             Completed
-          </a>
+          </button>
+        </li>
+        <li>
+          <button
+            onClick={() => onShow(DELETED_TODOS)}
+            className={classNames({ selected: nowShowing === DELETED_TODOS })}
+          >
+            Deleted
+          </button>
         </li>
       </ul>
       {clearButton}

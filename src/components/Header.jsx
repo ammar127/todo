@@ -1,18 +1,11 @@
-import React, { createRef } from 'react';
-import { ENTER_KEY } from '../constants';
+import React from 'react';
 
-function Header() {
-  const inputField = createRef();
-  const handleNewTodoKeyDown = (e) => {
-    if (e.keyCode !== ENTER_KEY) {
-      return;
-    }
-  };
+function Header({ newTodoField, handleNewTodoKeyDown }) {
   return (
     <header className='header'>
       <h1>todos</h1>
       <input
-        ref={inputField}
+        ref={newTodoField}
         className='new-todo'
         placeholder='What needs to be done?'
         onKeyDown={(e) => handleNewTodoKeyDown(e)}
